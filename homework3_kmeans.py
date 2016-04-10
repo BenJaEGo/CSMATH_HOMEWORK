@@ -55,13 +55,10 @@ class kmeans(object):
         for itr in range(max_iter):
             for cluster_idx in range(self.cluster_number):
                 dist_mat = self.calc_dist_mat(self.data, self.cluster_centers)
-                # print(dist_mat.shape)
                 self.cluster_label = dist_mat.argmin(axis=1)
-                # print(self.cluster_label.shape)
             for cluster_idx in range(self.cluster_number):
                 data_slice = self.data[cluster_idx == self.cluster_label]
                 self.cluster_centers[cluster_idx, :] = np.mean(data_slice, axis=0)
-                # print(self.cluster_centers.shape)
 
             loss = self.calc_loss()
             if np.abs(loss - pre_loss) < eps:
@@ -120,9 +117,9 @@ if __name__ == '__main__':
     k_obj.generate_data()
 
     # make sure calc_dist_mat is true
-    # dist1 = k_obj.calc_dist_loop(k_obj.data, k_obj.cluster_centers)
-    # dist2 = k_obj.calc_dist_mat(k_obj.data, k_obj.cluster_centers)
-    # print(np.allclose(dist1, dist2))
+    dist1 = k_obj.calc_dist_loop(k_obj.data, k_obj.cluster_centers)
+    dist2 = k_obj.calc_dist_mat(k_obj.data, k_obj.cluster_centers)
+    print(np.allclose(dist1, dist2))
 
     k_obj.cluster(maxIter, epsilon)
     k_obj.plot()
