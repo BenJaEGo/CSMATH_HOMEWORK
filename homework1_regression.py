@@ -7,9 +7,11 @@ _floatX = np.float32
 
 class CurveFitting(object):
 
-    def __init__(self, n, m):
+    def __init__(self, n, m, lr, lm):
         self.n = n
         self.m = m + 1
+        self.lr = lr
+        self.lm = lm
         self.x = np.zeros((self.n, 1), dtype=_floatX)
         self.y = np.zeros((self.n, 1), dtype=_floatX)
         self.w = np.zeros((self.m, 1), dtype=_floatX)
@@ -25,19 +27,21 @@ class CurveFitting(object):
         for i in range(self.m):
             self.data[:, i] = self.data[:, i] ** i
 
-    def regression_gradient_descent(self, max_iter, lr):
+    def regression_gradient_descent(self, max_iter):
 
         for i in range(max_iter):
             h_theta_x = np.dot(self.data, self.w)
-            loss = ((h_theta_x - self.y) ** 2).sum() / 2
+            loss = ((h_theta_x - self.y) ** 2).sum() / 2 + self.lm * 1/2 * (self.w[1:-1]**2).sum()
             if i % 1000 == 0:
+                self.lr *= 0.9
                 print("current iter is: ...", i, "current loss is: ...", loss)
-            self.w = self.w - lr * np.dot(self.data.T, (h_theta_x - self.y))
+            gradient = np.dot(self.data.T, (h_theta_x - self.y)) + self.lm * self.w
+            self.w -= self.lr * gradient
 
     def regression_normal_equation(self):
-        self.w = np.linalg.inv(np.dot(self.data.T, self.data)).dot(self.data.T).dot(self.y)
+        self.w = np.linalg.inv(np.dot(self.data.T, self.data) + self.lm * np.identity(self.m)).dot(self.data.T).dot(self.y)
         h_theta_x = np.dot(self.data, self.w)
-        loss = ((h_theta_x - self.y) ** 2).sum() / 2
+        loss = ((h_theta_x - self.y) ** 2).sum() / 2 + self.lm * 1/2 * (self.w[1:-1]**2).sum()
         print("using normal equation, loss is: ", loss)
 
     def plot(self):
@@ -53,19 +57,23 @@ class CurveFitting(object):
         plt.plot(self.x, self.y, 'o', label='sample with gaussian noise')
         plt.plot(x_sample, y_sample, label='real sin(x)')
         plt.plot(x_sample, h_sample, label='fitted curve')
-        plt.title('N=%s, M=%s' % (self.n, self.m-1))
+        plt.title('N=%s, M=%s, lambda= %s' % (self.n, self.m-1, self.lm))
         plt.legend()
         plt.show()
 
 if __name__ == '__main__':
-    max_iter = 100000
+
+    n = 10
+    m = 9
     lr = 0.1
-    cf = CurveFitting(10, 9)
+    lm = 1
+    cf = CurveFitting(n, m, lr, lm)
+    max_iter = 100000
     cf.generate_data()
     # choice can be 'gd' or 'ne'
     choice = 'ne'
     if 'gd' == choice:
-        cf.regression_gradient_descent(max_iter, lr)
+        cf.regression_gradient_descent(max_iter)
     elif 'ne' == choice:
         cf.regression_normal_equation()
     else:
