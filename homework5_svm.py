@@ -247,6 +247,7 @@ if __name__ == '__main__':
     n = 2
     c = 1
     t = 1e-3
+	# choice can be 'lin', 'poly' or 'rbf'
     # choice = 'lin'
     # choice = 'poly'
     choice = 'rbf'

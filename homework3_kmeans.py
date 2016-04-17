@@ -116,7 +116,7 @@ if __name__ == '__main__':
     k_obj = kmeans(k, m, n)
     k_obj.generate_data()
 
-    # make sure calc_dist_mat is true
+    # make sure calc_dist_mat is right
     dist1 = k_obj.calc_dist_loop(k_obj.data, k_obj.cluster_centers)
     dist2 = k_obj.calc_dist_mat(k_obj.data, k_obj.cluster_centers)
     print(np.allclose(dist1, dist2))
