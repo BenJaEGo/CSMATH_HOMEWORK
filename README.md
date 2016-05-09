@@ -9,13 +9,13 @@ In homework2, PCA is mainly implemented using np.linalg.svd() (sorry for that..)
 
 In homework3, kmeans is implemented in a vectorized style and gmm is implemented using EM algorithm.
 
-Doesn't want to implement homework4 (LM algorithm), select conjugate prior instead.
+In homwwork4, implement LM algorithm and test it on a simple quadric function.
 
 In homework5, svm is implemented using SMO algorithm.
 
 
 here is the course paper mission (extra homework):
-First implement softmax, then multi-layer perceptron, finally convolutional neural networks, test them on MNIST dataset.
+First implement softmax, then multi-layer perceptron, finally convolutional neural networks (simple version, with mean pooling and max pooling, with default values, stride for convolve and pooling is 1, padding is 0), test them on MNIST dataset.
 
 
 To be done: recurrent neural networks and RCNN.
